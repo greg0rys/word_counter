@@ -57,16 +57,14 @@ void openFile(ifstream &file) {
         }
         else // we have used filename already, copy to temp delete previous pointer, and copy new cstring
         {
-            wordSize = strlen(filename) + 1;
-            char * temp = new char[wordSize + 2];
-            strcpy(temp,filename);
-            delete []filename;
-            filename = new char[wordSize];
-            strcpy(filename,temp);
-            delete []temp;
-            filename[wordSize - 1] = letter;
-        }
+            wordSize = strlen(filename);
+            char * temp = new char[wordSize + 2] {0};
+            strcpy(temp, filename);
+            delete[]filename;
+            filename = temp;
+            filename[wordSize] = letter;
 
+        }
 
         // if the letter we get from the stream is a newline then break from this loop as that is end of user input
         if(letter == '\n')
@@ -74,12 +72,14 @@ void openFile(ifstream &file) {
             break;
         }
 
+
     }
 
-    // make sure that our file name gettings the null node terminator appended to it so that it is a valid
-    // cstring for the file.open(filename) method.
+//     make sure that our file name gettings the null node terminator appended to it so that it is a valid
+//     cstring for the file.open(filename) method.
     if(filename[wordSize - 1] != '\0')
     {
+        wordSize = strlen(filename);
         char * temp = new char[wordSize + 1];
         strcpy(temp, filename);
         delete []filename;
@@ -89,13 +89,16 @@ void openFile(ifstream &file) {
         filename[wordSize - 1] = '\0'; // append null node to the end.
     }
 
+
+
     file.open(filename);
+
     if(!file.is_open())
     {
         // we need to loop and keep trying this method if the file isn't open.
-       cout << "Error opening file: " << filename << " please try again " << endl;
-       cout << endl;
-       openFile(file);
+        cout << "Error opening file: " << filename << " please try again " << endl;
+        cout << endl;
+        openFile(file);
     }
     else
     {
@@ -109,97 +112,74 @@ void openFile(ifstream &file) {
 }
 
 void readFile(ifstream &file, list & index) {
-    char * buffer = nullptr;
+    char * buffer = new char[2]{};
     word tempWord;
     char letter = 0;
-    int wordSize = 0;
+    int wordSize = 1;
+
+    // new approach get the whole line and break the line up into words.
 
     while(file.good() && !file.eof())
     {
 
-        letter = file.get();
+        file.get(buffer, wordSize + 1);
+        cout << buffer;
 
 
 
-        if(buffer == nullptr)
-        {
-            buffer = new char[2];
-            buffer[0] = letter;
-            buffer[1] = '\0';
-        }
-        else
-        {
-            wordSize = strlen(buffer);
-            char *temp = new char[wordSize + 2];
-            strcpy(temp,buffer);
-            delete []buffer;
-            buffer = new char[strlen(temp)];
-            strcpy(buffer,temp);
-            buffer[wordSize] = letter;
-            delete []temp;
-        }
+        
+            file.get(buffer, wordSize + 1);
+            cout << buffer;
+//            char *temp = new char[wordSize + 2]{0};
+//            strcpy(temp,buffer);
+//            delete []buffer;
+//            buffer = temp;
+//            buffer[wordSize] = letter;
 
 
-        if(letter == '\n')
-        {
-            if(buffer[wordSize] - 1 != '\0')
-            {
-                char * temp = new char[wordSize + 1];
-                strcpy(temp, buffer);
-                delete []buffer;
-                buffer = new char[wordSize + 1];
-                strcpy(buffer,temp);
-                delete []temp;
-                buffer[wordSize + 1] = '\0';
-            }
-            tempWord.SetData(buffer);
-            index.insert(tempWord);
-            delete []buffer;
-            buffer = nullptr;
-            continue;
-        }
+//
+//        if(isspace(letter))
+//        {
+//            wordSize = strlen(buffer);
+//            char *temp = new char[wordSize + 2]{0};
+//            strcpy(temp,buffer);
+//            delete []buffer;
+//            buffer = temp;
+//            buffer[wordSize] = '\0';
+//            tempWord.SetData(buffer);
+//            index.insert(tempWord);
+//            buffer = nullptr;
+//            continue;
+//
+//        }
 
-
-        if(isspace(letter))
-        {
-            if(buffer[wordSize] - 1 != '\0')
-            {
-                char * temp = new char[wordSize + 1];
-                strcpy(temp, buffer);
-                delete []buffer;
-                buffer = new char[wordSize + 1];
-                strcpy(buffer,temp);
-                delete []temp;
-                buffer[wordSize + 1] = '\0';
-            }
-            tempWord.SetData(buffer);
-            index.insert(tempWord);
-            delete []buffer;
-            buffer = nullptr;
-            continue;
-
-        }
-
-        if(buffer[wordSize] - 1 != '\0')
-        {
-            char * temp = new char[wordSize + 1];
-            strcpy(temp, buffer);
-            delete []buffer;
-            buffer = new char[wordSize + 1];
-            strcpy(buffer,temp);
-            delete []temp;
-            buffer[wordSize + 1] = '\0';
-        }
-
-        tempWord.SetData(buffer);
-        index.insert(tempWord);
     }
 
 
-
-
-
-    index.printList();
+//    if(buffer && buffer[wordSize - 1] != '\0')
+//    {
+//        wordSize = strlen(buffer);
+//        char * temp = new char[wordSize + 2]{0};
+//        strcpy(temp,buffer);
+//        delete []buffer;
+//        buffer = temp;
+//        buffer[wordSize] = '\0';
+//        delete []temp;
+//    }
+//
+//    tempWord.SetData(buffer);
+//    index.insert(tempWord);
     delete []buffer;
+//    index.printList();
+}
+
+void addNullNode(char * letters) {
+    int size = strlen(letters) + 1;
+    char * temp = new char[size];
+    strcpy(temp, letters);
+    delete []letters;
+    letters = new char[size];
+    strcpy(letters,temp);
+    letters[size - 1] = '\0';
 }
 
