@@ -1,0 +1,30 @@
+// read a dynamic cstring.
+
+#include <iostream> 
+#include <fstream> 
+#include <cstring> 
+using namespace std; int main()
+ { 
+ifstream in("text.txt");
+ char * buffer = nullptr; 
+while(in.good())
+ { 
+char byte = in.get(); 
+if(buffer == nullptr) 
+{
+ buffer = new char[2]; 
+buffer[0] = byte; 
+buffer[1] = '\0'; 
+} 
+else { 
+int len = strlen(buffer);
+ char * temp = new char[len + 2];
+ strcpy(temp, buffer);
+ delete [] buffer; 
+buffer = temp;
+ buffer[len] = byte; buffer[len+1] = '\0';
+ } 
+} 
+delete [] buffer; 
+return 0;
+ }
