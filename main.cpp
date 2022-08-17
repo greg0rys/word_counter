@@ -1,3 +1,16 @@
+//****************************************************************************
+// Author:      Greg Shenefelt
+// Assignment:  Homework Two
+// Date:        August 10th 2022
+// Description: This program reads in dynamic cstrings of user input to get a filename from the user
+//              then a dynamic list is created that stores a word object for each word in the file.
+//
+// add, remove, and see grades
+// Inputs: 		A file name the user wants to have counted.
+// Outputs:		A unique list of words containing the count of each word.
+// Sources:		cplusplus.com, zybooks, professor.
+//****************************************************************************
+
 #include "main.h"
 #include <iostream>
 #include <cstring>
@@ -8,38 +21,20 @@ int main() {
     cout << "Welcome to my word counter application "
          << "I hope you find this useful!" << endl;
 
-    word newWord("hello");
-    word anotherWord("hi");
-    char tester[6];
-    strcpy(tester,"hello");
-    list list1;
-    list1.insert(newWord);
-    list1.insert(anotherWord);
-    word thirdWord("tester");
-    list1.insert(thirdWord);
-    thirdWord.SetData(tester);
-    word fourth(thirdWord);
-    fourth.GetData(tester);
-    cout << tester << endl;
-    fourth.SetData("Grego");
-    fourth.GetData(tester);
-    list1.insert(fourth);
-    cout << "now tester is: " << tester << endl;
-    list list2(list1);
-    list1.printList();
-    cout << endl << endl;
-    list2.printList();
-
     ifstream file;
-    openFile(file);
+    list sortedWordList;
+    openFile(file, sortedWordList);
+    sortedWordList.SortList();
+    sortedWordList.CleanList();
+    sortedWordList.printList();
 
-    return EXIT_SUCCESS;
+
+    return 0;
 }
 
-void openFile(ifstream &file) {
+void openFile(ifstream &file, list &wordList) {
     int wordSize = 0;
     char * filename = nullptr;
-    list list1;
     cout << "enter a filename: > ";
 
     // loop through the cin stream and grab each letter.
@@ -72,7 +67,7 @@ void openFile(ifstream &file) {
         }
     }
 
-    std::cout << "filename: [" << filename << "]\n";
+   cout << "filename: [" << filename << "]\n";
 
 
     file.open(filename);
@@ -82,23 +77,17 @@ void openFile(ifstream &file) {
         // we need to loop and keep trying this method if the file isn't open.
         cout << "Error opening file: " << filename << " please try again " << endl;
         cout << endl;
-        openFile(file);
+        openFile(file, wordList);
     }
     else
     {
-        cout << "file: " << filename << " has been opened! " << endl;
-        cout << endl << endl;
-        readFile(file,list1);
+        cout << endl;
+        readFile(file,wordList);
+        cout << "[ " << filename << " ] has " << wordList.GetSize() << " words" << endl;
+
 
     }
 
-    cout << "Before list clean: " << list1.GetSize() << endl;
-    list1.printList();
-    list1.SortList();
-    list1.CleanList();
-    cout << endl << endl;
-    cout << "After list clean: " << list1.GetSize() << endl;
-    list1.printList();
 
     delete []filename; // release the memory from the []filename pointer.
 }
