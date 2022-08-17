@@ -28,6 +28,9 @@ int main() {
     sortedWordList.CleanList();
     sortedWordList.printList();
 
+    cout << endl;
+    cout << "[ " << "done " <<"]";
+
 
     return 0;
 }
