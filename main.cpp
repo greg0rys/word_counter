@@ -39,6 +39,7 @@ int main() {
 void openFile(ifstream &file) {
     int wordSize = 0;
     char * filename = nullptr;
+    list list1;
     cout << "enter a filename: > ";
 
     // loop through the cin stream and grab each letter.
@@ -85,11 +86,19 @@ void openFile(ifstream &file) {
     }
     else
     {
-        list list1;
         cout << "file: " << filename << " has been opened! " << endl;
         cout << endl << endl;
         readFile(file,list1);
+
     }
+
+    cout << "Before list clean: " << list1.GetSize() << endl;
+    list1.printList();
+    list1.SortList();
+    list1.CleanList();
+    cout << endl << endl;
+    cout << "After list clean: " << list1.GetSize() << endl;
+    list1.printList();
 
     delete []filename; // release the memory from the []filename pointer.
 }
@@ -137,6 +146,7 @@ void readFile(ifstream &file, list & index) {
         index.insert(tempWord);
         delete []buffer;
     }
-    cout << "The list has: " << index.GetSize() << endl;
-    index.printList();
+
+    file.close(); // all done with the file close it up.
+
 }

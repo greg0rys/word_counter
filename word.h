@@ -18,6 +18,10 @@ public:
     void SetData(const char *);
     void GetData(char *) const;
     void PrintData();
+    void IncrementCount();
+    int GetWordLength() const;
+    int GetCount() const;
+    void SetCount(const int);
 private:
     char * data;
     int count;

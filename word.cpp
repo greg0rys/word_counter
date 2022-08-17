@@ -81,5 +81,21 @@ void word::GetData(char * datum) const {
 }
 
 void word::PrintData() {
-    cout << data << endl;
+    cout << data << " " << count << endl;
+}
+
+void word::IncrementCount() {
+    count++;
+}
+
+int word::GetWordLength() const {
+    return strlen(data);
+}
+
+int word::GetCount() const {
+    return count;
+}
+
+void word::SetCount(const int newCount) {
+    count = newCount;
 }
